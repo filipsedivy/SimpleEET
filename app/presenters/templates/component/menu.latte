@@ -1,0 +1,75 @@
+<div class="well">
+    <div class="row">
+        <div class="col-md-12 status">
+            <div class="label label-primary" n:if="$service === production">Produkční režim</div>
+            <div class="label label-primary" n:if="$service === playground">Testovací režim</div>
+        </div>
+
+        <div class="col-md-12">
+            <ul class="nav nav-pills nav-stacked">
+                <li n:class="$presenter->isLinkCurrent('Homepage:*') ? active">
+                    <a n:href="Homepage:default">
+                        <span class="glyphicon glyphicon-home"></span> Domů
+                    </a>
+                </li>
+
+                <li n:class="$presenter->isLinkCurrent('Payment:*') ? active">
+                    <a n:href="Payment:default">
+                        <span class="glyphicon glyphicon-apple"></span> Zadat platbu
+                    </a>
+                </li>
+
+                <li n:class="$presenter->isLinkCurrent('History:*') ? active">
+                    <a n:href="History:default">
+                        <span class="glyphicon glyphicon-th-list"></span> Historie
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="well">
+    <div class="row">
+        <div class="col-md-12 status">
+            <div class="label label-default">
+                <span class="glyphicon glyphicon-bookmark"></span> Zkratky
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <ul class="nav nav-pills nav-stacked">
+                <li n:class="$presenter->isLinkCurrent('Shortcuts:resend') ? active">
+                    <a n:href="Shortcuts:resend">
+                        <span class="glyphicon glyphicon-refresh"></span> Znovu odeslání plateb
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="well">
+    <div class="row">
+        <div class="col-md-12 status">
+            <div class="label label-warning">
+                <span class="glyphicon glyphicon-wrench"></span> Nastavení
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <ul class="nav nav-pills nav-stacked">
+                <li n:class="$presenter->isLinkCurrent('Setting:elements') ? active">
+                    <a n:href="Setting:elements">
+                        <span class="glyphicon glyphicon-eye-close"></span> Nastavení elementů
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<div class="well text-center">
+    <a href="https://filipsedivy.cz" target="_blank">&copy; Filip Šedivý</a>
+</div>

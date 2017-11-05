@@ -1,0 +1,31 @@
+{block title}Detailní zobrazení platby, ID: {$id}{/block}
+{block content}
+    <div>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#receipt" aria-controls="receipt" role="tab" data-toggle="tab">
+                    <span class="glyphicon glyphicon-open"></span> Požadavek
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#codes" aria-controls="codes" role="tab" data-toggle="tab">
+                    <span class="glyphicon glyphicon-save"></span> Kódy
+                </a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="receipt">
+                {control tableRender $receipt}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="codes">
+                {control tableRender $codes}
+            </div>
+        </div>
+
+    </div>
+
+{/block}

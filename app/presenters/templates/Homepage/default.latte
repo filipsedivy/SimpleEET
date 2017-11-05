@@ -1,0 +1,33 @@
+{block title}Domovská stránka{/block}
+
+{block content}
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="panel panel-primary text-center">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-signal"></span> Počet odeslaných plateb
+                </div>
+                <div class="panel-body">{$payments}</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-danger text-center">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-thumbs-down"></span> Neodeslané platby
+                </div>
+                <div class="panel-body">{$unpaid}</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-primary text-center">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-euro"></span> Celková cena
+                </div>
+                <div class="panel-body">{$sum|number:2:',':' '} Kč</div>
+            </div>
+        </div>
+    </div>
+{/block}

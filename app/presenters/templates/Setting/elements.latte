@@ -1,0 +1,33 @@
+{block title}Nastavení elementů{/block}
+{block content}
+    <form class="form-horizontal" n:name="elements">
+        {foreach $form->components as $component}
+            {if $component instanceof Nette\Forms\Controls\RadioList}
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">{$component->caption}</label>
+                    <div class="col-sm-5">
+                        <div class="radio" n:foreach="$component->items as $key => $label">
+                            <label>
+                                <input
+                                        type="radio"
+                                        n:name="$component->name:$key"
+                                        {if $presenter->checked($component->name, $key)}checked="checked"{/if}>
+                                {$label}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            {elseif $component instanceof Nette\Forms\Controls\SubmitButton}
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button n:name="$component->name:$key" class="btn btn-default">{$component->caption}</button>
+                    </div>
+                </div>
+            {elseif $component instanceof Nette\Forms\Controls\HiddenField}
+                <input n:name="$component">
+            {else}
+                {dump $component}
+            {/if}
+        {/foreach}
+    </form>
+{/block}

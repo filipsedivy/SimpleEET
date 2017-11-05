@@ -1,0 +1,37 @@
+{block title}Instalace systému{/block}
+
+{block content}
+
+<form class="form-horizontal" n:name="installForm">
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Cesta k databázi</label>
+        <div class="col-sm-10">
+            <p class="form-control-static">{$db_path}</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Služba</label>
+        <div class="col-sm-10">
+            <div class="radio" n:foreach="$form['service']->items as $key => $label">
+                <label>
+                    <input n:name="service:$key" {if $iterator->first}checked="checked"{/if}>
+                    {$label}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group eet-production" n:foreach="$form['eet_head']->components as $component">
+        <label class="col-sm-2 control-label">{$component->caption}</label>
+        <div class="col-sm-10">
+            <input n:name="$component" class="form-control">
+            {if $component->control->attrs['data-helper'] !== null}
+                <p class="help-block">{$component->control->attrs['data-helper']}</p>
+            {/if}
+        </div>
+    </div>
+
+    <input class="btn btn-default btn-success" n:name=save>
+</form>

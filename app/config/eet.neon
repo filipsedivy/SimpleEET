@@ -1,0 +1,54 @@
+parameters:
+    eet_params:
+        porad_cis:
+            caption: Pořadové číslo účtenky
+            required: true
+
+        celk_trzba:
+            caption: Celková částka tržby
+            required: true
+
+        zakl_nepodl_dph:
+            caption: "Celková částka plnění osvobozených od DPH, ostatních plnění"
+
+        zakl_dan1:
+            caption: Celkový základ daně se základní sazbou DPH
+
+        dan1:
+            caption: Celková DPH se základní sazbou
+
+        zakl_dan2:
+            caption: Celkový základ daně s první sníženou sazbou DPH
+
+        dan2:
+            caption: Celková DPH s první sníženou sazbou
+
+        zakl_dan3:
+            caption: Celkový základ daně s druhou sníženou sazbou DPH
+
+        dan3:
+            caption: Celková DPH s druhou sníženou sazbou
+
+        cest_sluz:
+            caption: Celková částka v režimu DPH pro cestovní službu
+
+        pouzit_zboz1:
+            caption: Celková částka v režimu DPH pro prodej použitého zboží se základní sazbou
+
+        pouzit_zboz2:
+            caption: Celková částka v režimu DPH pro prodej použitého zboží s první sníženou sazbou
+
+        pouzit_zboz3:
+            caption: Celková částka v režimu DPH pro prodej použitého zboží s druhou sníženou sazbou
+
+        urceno_cerp_zuct:
+            caption: Celková částka plateb určená k následnému čerpání nebo zúčtování
+
+        cerp_zuct:
+            caption: "Celková částka plateb, které jsou následným čerpáním nebo zúčtováním platby"
+
+        rezim:
+            caption: Režim tržby
+            items:
+                0: běžný režim
+                1: zjednodušený režim

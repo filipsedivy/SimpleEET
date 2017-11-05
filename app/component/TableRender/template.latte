@@ -1,0 +1,43 @@
+<table class="table table-hover table-bordered">
+    <thead>
+    <tr>
+        <th>Klíč</th>
+        <th>Hodnota</th>
+    </tr>
+    </thead>
+
+    <tbody>
+        <tr n:foreach="$data as $key => $value">
+            <td>{$key}</td>
+            <td>
+                {if strlen($value) > 100}
+                    {$value|truncate:100,'...'}
+
+                    {var modal_hash = substr(md5(rand()), 0, 10)}
+                    <div class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modal-{$modal_hash}">
+                        zobrazit
+                    </div>
+                    <div class="modal fade" id="modal-{$modal_hash}" tabindex="-1" role="dialog" aria-labelledby="modal-{$modal_hash}">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Zavřít">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">Zobrazení hodnoty <code>{$key}</code></h4>
+                                </div>
+                                <div class="modal-body" style="width: 600px; overflow-wrap: break-word;">
+                                    {$value}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {elseif empty($value)}
+                    <small><code>Hodnota je prázdná</code></small>
+                {else}
+                    {$value}
+                {/if}
+            </td>
+        </tr>
+    </tbody>
+</table>

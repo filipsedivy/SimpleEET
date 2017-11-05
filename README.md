@@ -1,1 +1,1 @@
-SimpleEET
+nette-start

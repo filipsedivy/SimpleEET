@@ -1,0 +1,31 @@
+#
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# https://nette.org/security-warning
+#
+parameters:
+
+
+application:
+    errorPresenter: Error
+    mapping:
+        *: App\*Module\Presenters\*Presenter
+
+
+session:
+    expiration: 14 days
+
+
+services:
+    - App\Model\Install
+    - App\Model\Setting
+    - App\Model\EETData
+    - App\Services\EETService
+    router: App\RouterFactory::createRouter
+
+
+database:
+    dsn: 'sqlite:../app/private/database.db'
+
+
+includes:
+    - eet.neon
