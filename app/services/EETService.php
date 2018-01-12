@@ -94,12 +94,14 @@ class EETService
         /** @var Receipt $receipt */
         $receipt = unserialize($payment['Receipt']);
 
-        $codes = json_decode($payment['Response']);
-
         $receipt->uuid_zpravy = UUID::v4();
         $receipt->prvni_zaslani = false;
-        $receipt->bkp = $codes->bkp;
-        $receipt->pkp = base64_decode($codes->pkp);
+
+        if(is_null($payment['BKP'])) throw new \Exception('BKP kód neexistuje');
+        $receipt->bkp = $payment['BKP'];
+
+        if(is_null($payment['PKP'])) throw new \Exception('PKP kód neexistuje');
+        $receipt->pkp = $payment['PKP'];
 
         return $this->send($receipt, $id);
     }
@@ -220,11 +222,6 @@ class EETService
                 ), -1);
             }
 
-            if(!is_null($parentID))
-            {
-                // Je navázáno storno
-                exit($this->eetDataModel->getByFik($dispatcher->getFik()));
-            }
             return true;
         }
         catch (EetException $ex)
