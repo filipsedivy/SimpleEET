@@ -3,7 +3,7 @@
 # https://nette.org/security-warning
 #
 parameters:
-
+    version: 'v1.0'
 
 application:
     errorPresenter: Error
