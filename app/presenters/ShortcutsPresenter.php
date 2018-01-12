@@ -2,8 +2,15 @@
 
 namespace App\Presenters;
 
+use Tracy\Debugger;
+
 class ShortcutsPresenter extends BasePresenter
 {
+    public function renderResend()
+    {
+        $this->template->payments = $this->eetService->unsendPayments()->count();
+    }
+
     public function handleRun()
     {
         $unsendPayments = $this->eetService->unsendPayments()->fetchAll();
@@ -11,7 +18,19 @@ class ShortcutsPresenter extends BasePresenter
         $statsUnuccess = 0;
         foreach($unsendPayments as $unsendPayment)
         {
-            $payment = $this->eetService->resendPayment($unsendPayment['ID']);
+            $payment = null;
+
+            try
+            {
+                $payment = $this->eetService->resendPayment($unsendPayment['ID']);
+            }
+            catch(\Exception $e)
+            {
+                Debugger::log($e);
+                $this->flashMessage('Nastala chyba v sub-systému pro znovuzaslání plateb', 'alert-danger');
+                $this->redirect('Homepage:default');
+            }
+
             if($payment) $statsSuccess++;
             else $statsUnuccess++;
         }
