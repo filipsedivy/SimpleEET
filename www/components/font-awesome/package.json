@@ -1,0 +1,44 @@
+{
+  "_from": "components-font-awesome",
+  "_id": "components-font-awesome@4.6.3",
+  "_inBundle": false,
+  "_integrity": "sha1-UkNbNSpSnleBKTZB8Ao/rPH2fmM=",
+  "_location": "/components-font-awesome",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "components-font-awesome",
+    "name": "components-font-awesome",
+    "escapedName": "components-font-awesome",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/components-font-awesome/-/components-font-awesome-4.6.3.tgz",
+  "_shasum": "52435b352a529e5781293641f00a3facf1f67e63",
+  "_spec": "components-font-awesome",
+  "_where": "/Applications/MAMP/htdocs/SimpleEET",
+  "bugs": {
+    "url": "https://github.com/components/font-awesome/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Font Awesome, the iconic font designed for use with Twitter Bootstrap.",
+  "homepage": "https://github.com/components/font-awesome#readme",
+  "license": [
+    "MIT",
+    "OFL-1.1"
+  ],
+  "main": "css/font-awesome.css",
+  "name": "components-font-awesome",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/components/font-awesome.git"
+  },
+  "version": "4.6.3"
+}
