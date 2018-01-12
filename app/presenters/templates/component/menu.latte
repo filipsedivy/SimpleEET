@@ -59,9 +59,22 @@
 
         <div class="col-md-12">
             <ul class="nav nav-pills nav-stacked">
+                <li n:class="$presenter->isLinkCurrent('Setting:basic') ? active">
+                    <a n:href="Setting:basic">
+                        <span class="glyphicon glyphicon-wrench"></span> Základní nastavení
+                    </a>
+                </li>
+
                 <li n:class="$presenter->isLinkCurrent('Setting:elements') ? active">
                     <a n:href="Setting:elements">
                         <span class="glyphicon glyphicon-eye-close"></span> Nastavení elementů
+                    </a>
+                </li>
+
+
+                <li n:class="$presenter->isLinkCurrent('Setting:log') ? active">
+                    <a n:href="Setting:log, slug => user">
+                        <i class="fa fa-info"></i> Přehled událostí
                     </a>
                 </li>
             </ul>

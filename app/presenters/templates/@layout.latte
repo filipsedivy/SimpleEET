@@ -34,7 +34,12 @@
 		{if $installed}
 			<div class="row">
 				<div class="col-md-3">{include 'component/menu.latte'}</div>
-				<div class="col-md-9">{include content}</div>
+				<div class="col-md-9">
+					{if $presenter->isLinkCurrent('Setting:log')}
+						{include 'component/menu-log.latte'}
+					{/if}
+					{include content}
+				</div>
 			</div>
 		{else}
 			{include content}

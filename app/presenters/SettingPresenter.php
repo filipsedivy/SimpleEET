@@ -7,6 +7,17 @@ use Nette\Application\UI\Form;
 class SettingPresenter extends BasePresenter
 {
 
+    public function actionLog()
+    {
+        static $allow_slugs = array('system', 'user');
+        $slug = $this->getParameter('slug');
+
+        if(!in_array($slug, $allow_slugs) || is_null($slug))
+        {
+            $this->redirect('this', array('slug' => 'user'));
+        }
+    }
+
     public function createComponentElements()
     {
         $parameters = $this->context->parameters['eet_params'];
