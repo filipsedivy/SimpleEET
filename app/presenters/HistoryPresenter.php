@@ -76,21 +76,26 @@ class HistoryPresenter extends BasePresenter
 
         $grid->addAction('storno', 'Storno', 'StornoPayment')
             ->setRenderer(function ($row) {
-                $total_price = $row['TotalPrice'];
-                $btn = Html::el('a')
-                    ->setText('Storno')
-                    ->setAttribute('class', 'btn btn-xs btn-danger');
+                $btn = '';
 
-                if ($total_price <= 0 OR !is_null($row['ParentID']))
+                if(!is_null($row['FIK']))
                 {
-                    $btn->setAttribute('disabled', 'disabled');
-                }
-                else
-                {
-                    $btn->setAttribute('href', $this->link('Shortcuts:default', array(
-                        'id' => $row['ID'],
-                        'do' => 'storno'
-                    )));
+                    $total_price = $row['TotalPrice'];
+                    $btn = Html::el('a')
+                        ->setText('Storno')
+                        ->setAttribute('class', 'btn btn-xs btn-danger');
+
+                    if ($total_price <= 0 OR !is_null($row['ParentID']))
+                    {
+                        $btn->setAttribute('disabled', 'disabled');
+                    }
+                    else
+                    {
+                        $btn->setAttribute('href', $this->link('Shortcuts:default', array(
+                            'id' => $row['ID'],
+                            'do' => 'storno'
+                        )));
+                    }
                 }
 
                 return $btn;
