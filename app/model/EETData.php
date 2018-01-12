@@ -33,16 +33,21 @@ class EETData
     public function save(Receipt $receipt, array $codes, $parent_id = NULL)
     {
         $repeat = 0;
-        if(isset($codes['fik'])) { $repeat = -1; }
+        if(isset($codes['fik'])) $repeat = -1;
 
-        $this->context->table('eet_data')->insert(array(
+        $data = array(
             'Receipt'       => serialize($receipt),
-            'Response'      => json_encode($codes),
             'TotalPrice'    => $receipt->celk_trzba,
             'ParentID'      => $parent_id,
             'Repeat'        => $repeat,
             'Timestamp'     => $receipt->dat_trzby->getTimestamp()
-        ));
+        );
+
+        if(isset($codes['pkp'])) $data['PKP'] = $codes['pkp'];
+        if(isset($codes['fik'])) $data['FIK'] = $codes['fik'];
+        if(isset($codes['bkp'])) $data['BKP'] = $codes['bkp'];
+
+        $this->context->table('eet_data')->insert($data);
     }
 
     public function getById($id)

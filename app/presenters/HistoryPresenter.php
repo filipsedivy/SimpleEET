@@ -13,8 +13,8 @@ class HistoryPresenter extends BasePresenter
     public function renderShowReceipt()
     {
         $id = $this->getParameter('id');
-        $payment =  $this->eetDataModel->getById($id);
-        if(!$payment)
+        $payment = $this->eetDataModel->getById($id);
+        if (!$payment)
         {
             $this->flashMessage('Platba nebyla nelezena', 'alert-info');
             $this->redirect('History:default');
@@ -24,7 +24,11 @@ class HistoryPresenter extends BasePresenter
         $receipt = unserialize($payment['Receipt']);
 
         $this->template->receipt = $receipt;
-        $this->template->codes = json_decode($payment['Response']);
+        $this->template->codes = array(
+            'fik' => $payment['FIK'],
+            'bkp' => $payment['BKP'],
+            'pkp' => $payment['PKP']
+        );
         $this->template->id = $id;
     }
 
@@ -39,25 +43,20 @@ class HistoryPresenter extends BasePresenter
         $grid->setPrimaryKey('ID');
         $grid->setDataSource($this->eetDataModel->getTable());
         $grid->addColumnText('Timestamp', 'Datum tržby')
-            ->setRenderer(function($row) {
+            ->setRenderer(function ($row) {
                 return date('d.m.Y H:i:s', $row['Timestamp']);
             })->setSortable();
 
         $grid->addColumnNumber('TotalPrice', 'Celková cena')
-            ->setRenderer(function($row) {
-                return $row['TotalPrice'].' Kč';
+            ->setRenderer(function ($row) {
+                return $row['TotalPrice'] . ' Kč';
             })->setSortable();
 
-        $grid->addColumnText('FikCode', 'FIK')
-            ->setRenderer(function($row) {
-                $response = json_decode($row['Response']);
-                return isset($response->fik) ? $response->fik : '';
-            });
+        $grid->addColumnText('FIK', 'FIK');
 
         $grid->addColumnText('Register', 'Status')
-            ->setRenderer(function($row) {
-                $response = json_decode($row['Response']);
-                $fik = isset($response->fik) ? true : false;
+            ->setRenderer(function ($row) {
+                $fik = isset($row['FIK']) ? true : false;
                 $html = Html::el('span');
                 if ($fik)
                 {
@@ -76,13 +75,13 @@ class HistoryPresenter extends BasePresenter
             ->setClass('btn btn-primary btn-xs');
 
         $grid->addAction('storno', 'Storno', 'StornoPayment')
-            ->setRenderer(function($row) {
+            ->setRenderer(function ($row) {
                 $total_price = $row['TotalPrice'];
                 $btn = Html::el('a')
                     ->setText('Storno')
                     ->setAttribute('class', 'btn btn-xs btn-danger');
 
-                if($total_price <= 0 OR !is_null($row['ParentID']))
+                if ($total_price <= 0 OR !is_null($row['ParentID']))
                 {
                     $btn->setAttribute('disabled', 'disabled');
                 }
