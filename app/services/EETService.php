@@ -58,7 +58,7 @@ class EETService
     public function unsendPayments()
     {
         return $this->eetDataModel->getTable()
-            ->where('Repeat >= 0');
+            ->where('FIK IS NULL');
     }
 
 
