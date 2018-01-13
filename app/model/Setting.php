@@ -21,7 +21,7 @@ class Setting
 
     /**
      * @return Selection
-    */
+     */
     public function getTable()
     {
         return $this->context->table('setting');
@@ -29,8 +29,9 @@ class Setting
 
     /**
      * @param $key string
+     *
      * @return string|bool
-    */
+     */
     public function getValueByKey($key)
     {
         $table = $this->getTable();
@@ -41,14 +42,16 @@ class Setting
     }
 
     /**
-     * @param $key string
+     * @param $key   string
      * @param $value string
-    */
+     */
     public function insert($key, $value)
     {
-        try{
+        try
+        {
             $this->context->query('INSERT INTO setting VALUES (?, ?)', $key, $value);
-        }catch(UniqueConstraintViolationException $ex)
+        }
+        catch (UniqueConstraintViolationException $ex)
         {
             $this->updateValueByKey($key, $value);
         }
