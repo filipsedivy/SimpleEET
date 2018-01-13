@@ -25,7 +25,3 @@ services:
 
 database:
     dsn: 'sqlite:../app/private/database.db'
-
-
-includes:
-    - eet.neon
