@@ -21,7 +21,7 @@ class EETData
 
     /**
      * @return Selection
-    */
+     */
     public function getTable()
     {
         return $this->context->table('eet_data');
@@ -29,23 +29,23 @@ class EETData
 
     /**
      * Uložení dat
-    */
-    public function save(Receipt $receipt, array $codes, $parent_id = NULL)
+     */
+    public function save(Receipt $receipt, array $codes, $parent_id = null)
     {
         $repeat = 0;
-        if(isset($codes['fik'])) $repeat = -1;
+        if (isset($codes['fik'])) $repeat = -1;
 
         $data = array(
-            'Receipt'       => serialize($receipt),
-            'TotalPrice'    => $receipt->celk_trzba,
-            'ParentID'      => $parent_id,
-            'Repeat'        => $repeat,
-            'Timestamp'     => $receipt->dat_trzby->getTimestamp()
+            'Receipt'    => serialize($receipt),
+            'TotalPrice' => $receipt->celk_trzba,
+            'ParentID'   => $parent_id,
+            'Repeat'     => $repeat,
+            'TimeStamp'  => $receipt->dat_trzby->getTimestamp()
         );
 
-        if(isset($codes['pkp'])) $data['PKP'] = $codes['pkp'];
-        if(isset($codes['fik'])) $data['FIK'] = $codes['fik'];
-        if(isset($codes['bkp'])) $data['BKP'] = $codes['bkp'];
+        if (isset($codes['pkp'])) $data['PKP'] = $codes['pkp'];
+        if (isset($codes['fik'])) $data['FIK'] = $codes['fik'];
+        if (isset($codes['bkp'])) $data['BKP'] = $codes['bkp'];
 
         $this->context->table('eet_data')->insert($data);
     }
@@ -56,17 +56,22 @@ class EETData
             ->fetch();
     }
 
-    public function updateById($id, Receipt $receipt, array $codes, $repeat = NULL, $parentID = NULL)
+    public function updateById($id, Receipt $receipt, array $codes, $repeat = null, $parentID = null)
     {
         $data = array(
-            'Receipt'   => serialize($receipt),
-            'Response'  => json_encode($codes)
+            'Receipt'  => serialize($receipt),
+            'Response' => json_encode($codes)
         );
 
-        if(!is_null($repeat)) $data['Repeat'] = $repeat;
-        if(!is_null($parentID)) $data['ParentID'] = $parentID;
+        if (!is_null($repeat)) $data['Repeat'] = $repeat;
+        if (!is_null($parentID)) $data['ParentID'] = $parentID;
 
         $this->getTable()->where('ID = ?', $id)->update($data);
+    }
+
+    public function updateColumnByPaymentId($paymentId, $data)
+    {
+        $this->getTable()->where('ID = ?', $paymentId)->update($data);
     }
 
     public function lastId($increment = false)
