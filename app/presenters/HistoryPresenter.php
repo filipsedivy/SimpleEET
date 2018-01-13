@@ -42,9 +42,9 @@ class HistoryPresenter extends BasePresenter
         $grid = new DataGrid($this, $name);
         $grid->setPrimaryKey('ID');
         $grid->setDataSource($this->eetDataModel->getTable());
-        $grid->addColumnText('Timestamp', 'Datum tržby')
+        $grid->addColumnText('TimeStamp', 'Datum tržby')
             ->setRenderer(function ($row) {
-                return date('d.m.Y H:i:s', $row['Timestamp']);
+                return date('d.m.Y H:i:s', $row['TimeStamp']);
             })->setSortable();
 
         $grid->addColumnNumber('TotalPrice', 'Celková cena')
@@ -78,7 +78,7 @@ class HistoryPresenter extends BasePresenter
             ->setRenderer(function ($row) {
                 $btn = '';
 
-                if(!is_null($row['FIK']))
+                if (!is_null($row['FIK']))
                 {
                     $total_price = $row['TotalPrice'];
                     $btn = Html::el('a')
