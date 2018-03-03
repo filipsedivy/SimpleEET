@@ -15,3 +15,9 @@
     font-weight: bold;
     font-size: 15px;
 }
+
+.form-group.required .control-label:after {
+    content: "*";
+    color: red;
+    font-weight: bold;
+}
