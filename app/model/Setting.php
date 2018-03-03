@@ -19,6 +19,7 @@ class Setting
         $this->context = $context;
     }
 
+
     /**
      * @return Selection
      */
@@ -26,6 +27,7 @@ class Setting
     {
         return $this->context->table('setting');
     }
+
 
     /**
      * @param $key string

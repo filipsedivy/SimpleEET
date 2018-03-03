@@ -5,60 +5,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+    <meta charset="utf-8">
 
-	<title>{ifset title}{include title|stripHtml} | {/ifset}SimpleEET</title>
+    <title>{ifset title}{include title|stripHtml} | {/ifset}SimpleEET</title>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link rel="stylesheet" href="{$basePath}/components/bootstrap/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="{$basePath}/components/happy/dist/happy.min.css">
-	<link rel="stylesheet" href="{$basePath}/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css">
-	<link rel="stylesheet" href="{$basePath}/components/ublaboo-datagrid/assets/dist/datagrid.min.css">
-	<link rel="stylesheet" href="{$basePath}/components/ublaboo-datagrid/assets/dist/datagrid-spinners.min.css">
-	<link rel="stylesheet" href="{$basePath}/components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{$basePath}/components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{$basePath}/components/happy/dist/happy.min.css">
+    <link rel="stylesheet" href="{$basePath}/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="{$basePath}/components/ublaboo-datagrid/assets/dist/datagrid.min.css">
+    <link rel="stylesheet" href="{$basePath}/components/ublaboo-datagrid/assets/dist/datagrid-spinners.min.css">
+    <link rel="stylesheet" href="{$basePath}/components/font-awesome/css/font-awesome.min.css">
 
 
-	<link rel="stylesheet" href="{$basePath}/css/style.css">
-	{block head}{/block}
+    <link rel="stylesheet" href="{$basePath}/css/style.css">
+    {block head}{/block}
 </head>
 
 <body>
-	<div class="container">
-		<div class="page-header">
-			<h1>SimpleEET <small>{ifset title}{include title}{else}základní rozhraní{/ifset}</small></h1>
-		</div>
+<div class="container">
+    <div class="page-header">
+        <h1>SimpleEET
+            <small>{ifset title}{include title}{else}základní rozhraní{/ifset}</small>
+        </h1>
+    </div>
 
-		<div n:foreach="$flashes as $flash" n:class="alert, $flash->type">{$flash->message}</div>
+    <div n:foreach="$flashes as $flash" n:class="alert, $flash->type">{$flash->message}</div>
 
-		{if $installed}
-			<div class="row">
-				<div class="col-md-3">{include 'component/menu.latte'}</div>
-				<div class="col-md-9">
-					{if $presenter->isLinkCurrent('Setting:log')}
-						{include 'component/menu-log.latte'}
-					{/if}
-					{include content}
-				</div>
-			</div>
-		{else}
-			{include content}
-		{/if}
+    {if $installed}
+        <div class="row">
+            <div class="col-md-3">{include 'component/menu.latte'}</div>
+            <div class="col-md-9">
+                {if $presenter->isLinkCurrent('Setting:log')}
+                    {include 'component/menu-log.latte'}
+                {/if}
+                {include content}
+            </div>
+        </div>
+    {else}
+        {include content}
+    {/if}
 
-	</div>
+</div>
 
-	{block scripts}
-	<script src="{$basePath}/components/jquery/dist/jquery.min.js"></script>
-	<script src="{$basePath}/components/nette-forms/src/assets/netteForms.min.js"></script>
-	<script src="{$basePath}/components/nette.ajax.js/nette.ajax.js"></script>
-	<script src="{$basePath}/components/happy/dist/happy.min.js"></script>
-	<script src="{$basePath}/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-	<script src="{$basePath}/components/jquery-ui-sortable/jquery-ui-sortable.min.js"></script>
-	<script src="{$basePath}/components/ublaboo-datagrid/assets/dist/datagrid.min.js"></script>
-	<script src="{$basePath}/components/ublaboo-datagrid/assets/dist/datagrid-instant-url-refresh.min.js"></script>
-	<script src="{$basePath}/components/ublaboo-datagrid/assets/dist/datagrid-spinners.min.js"></script>
-	<script src="{$basePath}/components/bootstrap/dist/js/bootstrap.js"></script>
-	<script src="{$basePath}/js/engine.js"></script>
-	{/block}
+{block scripts}
+    <script src="{$basePath}/components/nette-forms/src/assets/netteForms.min.js"></script>
+    <script src="{$basePath}/components/jquery/dist/jquery.min.js"></script>
+    <script src="{$basePath}/components/nette.ajax.js/nette.ajax.js"></script>
+    <script src="{$basePath}/components/happy/dist/happy.min.js"></script>
+    <script src="{$basePath}/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="{$basePath}/components/jquery-ui-sortable/jquery-ui-sortable.min.js"></script>
+    <script src="{$basePath}/components/ublaboo-datagrid/assets/dist/datagrid.min.js"></script>
+    <script src="{$basePath}/components/ublaboo-datagrid/assets/dist/datagrid-instant-url-refresh.min.js"></script>
+    <script src="{$basePath}/components/ublaboo-datagrid/assets/dist/datagrid-spinners.min.js"></script>
+    <script src="{$basePath}/components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="{$basePath}/js/engine.js"></script>
+{/block}
 </body>
 </html>

@@ -58,12 +58,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     /**
      * @return bool|string
-    */
+     */
     protected function getCertificationPath()
     {
-        $finder = Finder::findFiles('*.p12')->in(__DIR__.'/../private');
-        if($finder->count() === 0) return false;
-        foreach($finder as $key => $file)
+        $finder = Finder::findFiles('*.p12')->in(__DIR__ . '/../private');
+        if ($finder->count() === 0) return false;
+        foreach ($finder as $key => $file)
         {
             return $key;
         }

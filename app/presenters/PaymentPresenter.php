@@ -61,9 +61,9 @@ class PaymentPresenter extends BasePresenter
             $this->flashMessage('Tržba byla zaevidována', 'alert-success');
             $this->redirect('Homepage:default');
         }
-        catch(ServerException $ex)
+        catch (ServerException $ex)
         {
-            $this->flashMessage('Zpráva nebyla odeslána z důvodu: '.$ex->getMessage(), 'alert-danger');
+            $this->flashMessage('Zpráva nebyla odeslána z důvodu: ' . $ex->getMessage(), 'alert-danger');
         }
     }
 

@@ -30,13 +30,15 @@ class EETService
 
     /**
      * Celková cena
+     *
      * @param $storno bool Zahrnout i stornované faktury
+     *
      * @return double
-    */
+     */
     public function sum($storno = false)
     {
         $table = $this->eetDataModel->getTable();
-        if($storno === false)
+        if ($storno === false)
         {
             $table->where('ParentID IS NULL');
         }
@@ -47,7 +49,7 @@ class EETService
     /**
      * Celkový počet záznamů
      * @return integer
-    */
+     */
     public function count()
     {
         return $this->eetDataModel->getTable()->count('ID');
@@ -58,13 +60,29 @@ class EETService
     public function unsendPayments()
     {
         return $this->eetDataModel->getTable()
-            ->where('FIK IS NULL');
+            ->where('FIK IS NULL')
+            ->where('Exception IS NULL');
+    }
+
+    public function updateExceptionByPaymentId($paymentId, $exception)
+    {
+        if ($exception instanceof \Exception)
+        {
+            $this->eetDataModel->updateColumnByPaymentId($paymentId, array(
+                'Exception' => json_encode(array(
+                    'message' => $exception->getMessage(),
+                    'code'    => $exception->getCode()
+                ))
+            ));
+        }
     }
 
 
     /**
      * Vytvoří platbu, kterou zašle do EET
+     *
      * @param ArrayHash $values
+     *
      * @return bool
      */
     public function createPayment(ArrayHash $values)
@@ -74,7 +92,7 @@ class EETService
         $receipt = new Receipt;
         $receipt->uuid_zpravy = UUID::v4();
 
-        if($service === 'playground')
+        if ($service === 'playground')
         {
             $receipt->id_provoz = '1';
             $receipt->id_pokl = 'PlaygroundCash';
@@ -97,10 +115,10 @@ class EETService
         $receipt->uuid_zpravy = UUID::v4();
         $receipt->prvni_zaslani = false;
 
-        if(is_null($payment['BKP'])) throw new \Exception('BKP kód neexistuje');
+        if (is_null($payment['BKP'])) throw new \Exception('BKP kód neexistuje');
         $receipt->bkp = $payment['BKP'];
 
-        if(is_null($payment['PKP'])) throw new \Exception('PKP kód neexistuje');
+        if (is_null($payment['PKP'])) throw new \Exception('PKP kód neexistuje');
         $receipt->pkp = $payment['PKP'];
 
         return $this->send($receipt, $id);
@@ -109,12 +127,12 @@ class EETService
     public function stornoByIdPayment($id)
     {
         $payment = $this->eetDataModel->getById($id);
-        if($payment === false)
+        if ($payment === false)
         {
             throw new \Exception('Položka nebyla nelezena');
         }
 
-        if($payment['TotalPrice'] <= 0)
+        if ($payment['TotalPrice'] <= 0)
         {
             throw new \Exception('Částka musí být větší než 0 Kč');
         }
@@ -122,17 +140,20 @@ class EETService
         /** @var Receipt $receipt */
         $receipt = unserialize($payment['Receipt']);
 
-        foreach($receipt as $key => $value)
+        foreach ($receipt as $key => $value)
         {
-            if(in_array($key, array(
+            if (in_array($key, array(
                 'porad_cis', 'rezim', 'uuid_zpravy',
                 'prvni_zaslani', 'dic_popl', 'dic_poverujiciho',
                 'id_provoz', 'id_pokl', 'dat_trzby', 'bkp', 'pkp'
-            ))) { continue; }
-
-            if(is_double($value) OR is_int($value))
+            )))
             {
-                if($value > 0)
+                continue;
+            }
+
+            if (is_double($value) OR is_int($value))
+            {
+                if ($value > 0)
                 {
                     $receipt->{$key} = $value * -1;
                 }
@@ -145,22 +166,22 @@ class EETService
     /** @return Receipt */
     private function mapEETReceipt(ArrayHash $values, Receipt $receipt)
     {
-        if(isset($values->porad_cis)) $receipt->porad_cis = intval($values->porad_cis);
+        if (isset($values->porad_cis)) $receipt->porad_cis = intval($values->porad_cis);
         // @TODO dat_trzby
-        if(isset($values->celk_trzba)) $receipt->celk_trzba = doubleval($values->celk_trzba);
-        if(isset($values->zakl_nepodl_dph)) $receipt->zakl_nepodl_dph = doubleval($values->zakl_nepodl_dph);
-        if(isset($values->zakl_dan1)) $receipt->zakl_dan1 = doubleval($values->zakl_dan1);
-        if(isset($values->dan1)) $receipt->dan1 = doubleval($values->dan1);
-        if(isset($values->zakl_dan2)) $receipt->zakl_dan2 = doubleval($values->zakl_dan2);
-        if(isset($values->dan2)) $receipt->dan2 = doubleval($values->dan2);
-        if(isset($values->zakl_dan3)) $receipt->zakl_dan3 = doubleval($values->zakl_dan3);
-        if(isset($values->dan3)) $receipt->dan3 = doubleval($values->dan3);
-        if(isset($values->cest_sluz)) $receipt->cest_sluz = doubleval($values->cest_sluz);
-        if(isset($values->pouzit_zboz1)) $receipt->pouzit_zboz1 = doubleval($values->pouzit_zboz1);
-        if(isset($values->pouzit_zboz2)) $receipt->pouzit_zboz2 = doubleval($values->pouzit_zboz2);
-        if(isset($values->pouzit_zboz3)) $receipt->pouzit_zboz3 = doubleval($values->pouzit_zboz3);
-        if(isset($values->urceno_cerp_zuct)) $receipt->urceno_cerp_zuct = doubleval($values->urceno_cerp_zuct);
-        if(isset($values->cerp_zuct)) $receipt->cerp_zuct = doubleval($values->cerp_zuct);
+        if (isset($values->celk_trzba)) $receipt->celk_trzba = doubleval($values->celk_trzba);
+        if (isset($values->zakl_nepodl_dph)) $receipt->zakl_nepodl_dph = doubleval($values->zakl_nepodl_dph);
+        if (isset($values->zakl_dan1)) $receipt->zakl_dan1 = doubleval($values->zakl_dan1);
+        if (isset($values->dan1)) $receipt->dan1 = doubleval($values->dan1);
+        if (isset($values->zakl_dan2)) $receipt->zakl_dan2 = doubleval($values->zakl_dan2);
+        if (isset($values->dan2)) $receipt->dan2 = doubleval($values->dan2);
+        if (isset($values->zakl_dan3)) $receipt->zakl_dan3 = doubleval($values->zakl_dan3);
+        if (isset($values->dan3)) $receipt->dan3 = doubleval($values->dan3);
+        if (isset($values->cest_sluz)) $receipt->cest_sluz = doubleval($values->cest_sluz);
+        if (isset($values->pouzit_zboz1)) $receipt->pouzit_zboz1 = doubleval($values->pouzit_zboz1);
+        if (isset($values->pouzit_zboz2)) $receipt->pouzit_zboz2 = doubleval($values->pouzit_zboz2);
+        if (isset($values->pouzit_zboz3)) $receipt->pouzit_zboz3 = doubleval($values->pouzit_zboz3);
+        if (isset($values->urceno_cerp_zuct)) $receipt->urceno_cerp_zuct = doubleval($values->urceno_cerp_zuct);
+        if (isset($values->cerp_zuct)) $receipt->cerp_zuct = doubleval($values->cerp_zuct);
         // @TODO rezim
         return $receipt;
     }
@@ -173,12 +194,12 @@ class EETService
     {
         $service = $this->settingModel->getValueByKey('service');
 
-        switch($service)
+        switch ($service)
         {
             case 'production':
             case 'playground':
                 $certificate = new Certificate(
-                    __DIR__.'/../../vendor/filipsedivy/php-eet/examples/EET_CA1_Playground-CZ00000019.p12',
+                    __DIR__ . '/../../vendor/filipsedivy/php-eet/examples/EET_CA1_Playground-CZ00000019.p12',
                     'eet'
                 );
                 $dispatcher = new Dispatcher($certificate);
@@ -195,18 +216,19 @@ class EETService
 
     /**
      * @TODO Je třeba upravit funkci
-    */
+     */
     private function send(Receipt $receipt, $id = null, $parentID = null)
     {
         $dispatcher = $this->getDispatcher();
         $repeat = 0;
-        if(!is_null($id))
+        if (!is_null($id))
         {
             $payment = $this->eetDataModel->getById($id);
             $repeat = $payment['Repeat'] + 1;
         }
 
-        try {
+        try
+        {
             $dispatcher->send($receipt);
 
             if (is_null($id))
@@ -214,8 +236,10 @@ class EETService
                 $this->eetDataModel->save($receipt, [
                     'fik' => $dispatcher->getFik(),
                     'bkp' => $dispatcher->getBkp()
-                ]);
-            } else {
+                ], $parentID);
+            }
+            else
+            {
                 $this->eetDataModel->updateById($id, $receipt, array(
                     'fik' => $dispatcher->getFik(),
                     'bkp' => $dispatcher->getBkp()
@@ -231,8 +255,10 @@ class EETService
                 $this->eetDataModel->save($receipt, [
                     'bkp' => $dispatcher->getBkp(),
                     'pkp' => $dispatcher->getPkp()
-                ]);
-            } else {
+                ], $parentID);
+            }
+            else
+            {
                 $this->eetDataModel->updateById($id, $receipt, array(
                     'pkp' => $dispatcher->getPkp(),
                     'bkp' => $dispatcher->getBkp()
@@ -246,8 +272,10 @@ class EETService
                 $this->eetDataModel->save($receipt, [
                     'bkp' => $dispatcher->getBkp(),
                     'pkp' => $dispatcher->getPkp()
-                ]);
-            } else {
+                ], $parentID);
+            }
+            else
+            {
                 $this->eetDataModel->updateById($id, $receipt, array(
                     'pkp' => $dispatcher->getPkp(),
                     'bkp' => $dispatcher->getBkp()

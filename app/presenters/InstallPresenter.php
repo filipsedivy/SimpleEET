@@ -26,7 +26,7 @@ class InstallPresenter extends BasePresenter
     {
         $form = new Form();
 
-        $form->addRadioList('service', NULL, array(
+        $form->addRadioList('service', null, array(
             'playground' => Html::el('span')->addHtml(
                 Html::el('b')->setText('Playground')
             )->addText(' - testovací prostředí'),
@@ -39,9 +39,9 @@ class InstallPresenter extends BasePresenter
         $eet_head = $form->addContainer('eet_head');
         $head = $this->installModel->getHead();
 
-        foreach($head as $row)
+        foreach ($head as $row)
         {
-            if($row instanceof Row)
+            if ($row instanceof Row)
             {
                 $eet_head->addText($row['XMLParam'], $row['Description'])
                     ->setAttribute('data-helper', $row['Helper']);
@@ -64,14 +64,15 @@ class InstallPresenter extends BasePresenter
             $this->flashMessage('Tato služba je nyní nefunkční', 'alert-danger');
             $this->redirect('this');
 
-            foreach($values->eet_head as $key => $value)
+            foreach ($values->eet_head as $key => $value)
             {
-                if(empty($value)) continue;
+                if (empty($value)) continue;
                 $this->installModel->setValueHeadByXmlParam($key, $value);
             }
         }
 
-        $this->settingModel->insert('service', $values->service);
+        $this->settingModel->insert('service', $values->service, 'install', 'string');
+
         $this->flashMessage('Systém byl nastaven', 'alert-success');
         $this->redirect('Homepage:default');
     }
