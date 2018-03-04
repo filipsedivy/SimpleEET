@@ -63,8 +63,11 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
             $this->showError($e);
         }
 
+
         $this->template->installed = $this->install->isInstalled();
         $this->template->service = $this->settingModel->getValueByKey('service');
+
+        $this->template->resendPayments = $this->eetService->unsendPayments()->count();
 
         $parameters = $this->context->getParameters();
         $this->template->version = $parameters['version'];
