@@ -2,13 +2,8 @@
 
 namespace App\Presenters;
 
-use FilipSedivy\EET\Dispatcher;
-use FilipSedivy\EET\Exceptions\ClientException;
-use FilipSedivy\EET\Exceptions\EetException;
+use App\UI\Form;
 use FilipSedivy\EET\Exceptions\ServerException;
-use FilipSedivy\EET\Receipt;
-use Nette\Application\UI\Form;
-use Nette\Neon\Exception;
 
 class PaymentPresenter extends BasePresenter
 {
