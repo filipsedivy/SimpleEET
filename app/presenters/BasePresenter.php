@@ -8,6 +8,8 @@ use App\Model\Setting;
 use App\Services\EETService;
 use Nette;
 use Nette\Utils\Finder;
+use Tracy\Debugger;
+use Tracy\ILogger;
 
 
 /**
@@ -38,15 +40,27 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     public function beforeRender()
     {
-        if(!$this->install->isInstalled() && $this->getAction(true) !== ':Install:default')
+        try
         {
-            $this->flashMessage('Nastavte prosím vstupní soubory a data', 'alert-info');
-            $this->redirect('Install:default');
+            if (!$this->install->isInstalled() && $this->getAction(true) !== ':Install:default')
+            {
+                $this->flashMessage('Nastavte prosím vstupní soubory a data', 'alert-info');
+                $this->redirect('Install:default');
+            }
+            elseif ($this->install->isInstalled() && $this->getAction(true) === ':Install:default')
+            {
+                $this->flashMessage('Systém již je nainstalován', 'alert-warning');
+                $this->redirect('Homepage:default');
+            }
         }
-        elseif($this->install->isInstalled() && $this->getAction(true) === ':Install:default')
+        catch (\Exception $e)
         {
-            $this->flashMessage('Systém již je nainstalován', 'alert-warning');
-            $this->redirect('Homepage:default');
+            if ($e instanceof Nette\Application\AbortException)
+            {
+                throw $e;
+            }
+
+            $this->showError($e);
         }
 
         $this->template->installed = $this->install->isInstalled();
@@ -68,5 +82,27 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
             return $key;
         }
         return false;
+    }
+
+    private function showError(\Exception $e)
+    {
+        Debugger::log($e, ILogger::EXCEPTION);
+        $errorOptions = array(
+            'database' => 'Databáze je poškozena'
+        );
+
+        foreach ($errorOptions as $errorOption => $reason)
+        {
+            if (preg_match('#' . $errorOption . '#', $e->getMessage()) ||
+                preg_match('#' . $errorOption . '#', $e->getFile())
+            )
+            {
+                $this->template->reason = $reason;
+                break;
+            }
+        }
+
+        $this->template->setFile(__DIR__ . '/templates/Error/Error.latte');
+        $this->sendTemplate();
     }
 }
