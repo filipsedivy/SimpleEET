@@ -59,8 +59,7 @@ class EETData
     public function updateById($id, Receipt $receipt, array $codes, $repeat = null, $parentID = null)
     {
         $data = array(
-            'Receipt'  => serialize($receipt),
-            'Response' => json_encode($codes)
+            'Receipt' => serialize($receipt)
         );
 
         if (!is_null($repeat)) $data['Repeat'] = $repeat;
