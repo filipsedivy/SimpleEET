@@ -6,20 +6,23 @@ use Nette\Application\UI\Control;
 
 class TableRender extends Control
 {
-    public function render($data)
+    public function render($data, $hideEmptyValues = true)
     {
         $template = $this->template;
         $template->setFile(__DIR__.'/template.latte');
-        $template->data = $this->fixData($data);
+        $template->data = $this->fixData($data, $hideEmptyValues);
         $template->render();
     }
 
     /** @return array */
-    private function fixData($data)
+    private function fixData($data, $hideEmptyValues)
     {
         $output = array();
         foreach($data as $key => $value)
         {
+            if($hideEmptyValues && empty($value)) continue;
+
+
             // DateTime objekt
             if($value instanceof \DateTime)
             {
