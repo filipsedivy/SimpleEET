@@ -43,6 +43,25 @@ class Setting
         return $fetch['Value'];
     }
 
+
+    public function getByGroup($group)
+    {
+        $table = $this->getTable();
+        return $table->select('*')
+            ->where('Group = ?', $group)
+            ->fetchAll();
+    }
+
+    public function getVisibleByGroup($group)
+    {
+        $table = $this->getTable();
+        return $table->select('*')
+            ->where('Group = ?', $group)
+            ->where('Visible = 1')
+            ->fetchAll();
+    }
+
+
     /**
      * @param string      $key
      * @param string|null $value
