@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chyba</title>
+
+    <link rel="stylesheet" href="{$basePath}/components/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="alert alert-danger">
+        V systému vznikla chyba, a díky této chybě není možné pokračovat v další operaci.
+    </div>
+
+    <span n:ifset="$reason">Možná chyba: <strong><mark>{$reason}</mark></strong></span>
+</div>
+
+</body>
+</html>
