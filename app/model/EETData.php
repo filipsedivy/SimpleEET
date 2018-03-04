@@ -62,6 +62,10 @@ class EETData
             'Receipt' => serialize($receipt)
         );
 
+        if (isset($codes['pkp'])) $data['PKP'] = $codes['pkp'];
+        if (isset($codes['fik'])) $data['FIK'] = $codes['fik'];
+        if (isset($codes['bkp'])) $data['BKP'] = $codes['bkp'];
+
         if (!is_null($repeat)) $data['Repeat'] = $repeat;
         if (!is_null($parentID)) $data['ParentID'] = $parentID;
 
