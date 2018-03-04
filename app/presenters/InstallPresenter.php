@@ -73,6 +73,9 @@ class InstallPresenter extends BasePresenter
 
         $this->settingModel->insert('service', $values->service, 'install', 'string');
 
+        /** @TODO Možnost vybrat z formuláře */
+        $this->settingModel->updateColumn('Value', 'rezim', 'bezny');
+
         $this->flashMessage('Systém byl nastaven', 'alert-success');
         $this->redirect('Homepage:default');
     }
