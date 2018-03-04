@@ -77,7 +77,7 @@ class Setting
         }
     }
 
-    public function updateValueByKey($key, $value)
+
     /**
      * @param string $column
      * @param string $key
