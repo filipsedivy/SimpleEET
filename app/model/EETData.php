@@ -79,4 +79,11 @@ class EETData
         $fetch = $this->getTable()->order('ID DESC')->limit(1)->fetch();
         return is_null($fetch['ID']) ? 1 : ($increment ? $fetch['ID'] + 1 : $fetch['ID']);
     }
+
+    public function getReceiptByParentId($parentId)
+    {
+        return $this->getTable()->select('*')
+            ->where('ParentID = ?', $parentId)
+            ->fetch();
+    }
 }
