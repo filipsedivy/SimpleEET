@@ -5,7 +5,6 @@ namespace App\Presenters;
 use App\Component\TableRender;
 use FilipSedivy\EET\Receipt;
 use Nette\Utils\Html;
-use Ublaboo\DataGrid\Column\Column;
 use Ublaboo\DataGrid\DataGrid;
 
 class HistoryPresenter extends BasePresenter
@@ -29,6 +28,7 @@ class HistoryPresenter extends BasePresenter
             'bkp' => $payment['BKP'],
             'pkp' => $payment['PKP']
         );
+        $this->template->errors = is_null($payment['Exception']) ? array() : json_decode($payment['Exception']);
         $this->template->id = $id;
     }
 
@@ -56,12 +56,44 @@ class HistoryPresenter extends BasePresenter
 
         $grid->addColumnText('Register', 'Status')
             ->setRenderer(function ($row) {
-                $fik = isset($row['FIK']) ? true : false;
+                $fik = isset($row->FIK) ? true : false;
                 $html = Html::el('span');
-                if ($fik)
+                if (!is_null($row['Exception']))
                 {
-                    $html->setAttribute('class', 'label label-success')
+                    $html->setAttribute('class', 'label label-warning')
+                        ->setText('Nelze registrovat');
+                }
+                elseif ($fik)
+                {
+                    $r = Html::el('span')
+                        ->setAttribute('class', 'label label-success')
                         ->setText('Registrována');
+
+                    $html->addHtml($r);
+
+                    $parent = $this->eetDataModel->getReceiptByParentId($row->ID);
+
+                    if ($parent !== false && $parent->TotalPrice <= 0)
+                    {
+                        $s = Html::el('a')
+                            ->setAttribute('class', 'label label-info')
+                            ->setAttribute('style', 'margin-left: 5px;')
+                            ->href($this->link('History:showReceipt', array(
+                                'id' => $parent->ID
+                            )))
+                            ->setText('Stornována');
+
+                        $html->addHtml($s);
+                    }
+                    elseif ($row->TotalPrice <= 0)
+                    {
+                        $s = Html::el('span')
+                            ->setAttribute('class', 'label label-primary')
+                            ->setAttribute('style', 'margin-left: 5px;')
+                            ->setText('Storno');
+
+                        $html->addHtml($s);
+                    }
                 }
                 else
                 {
@@ -78,24 +110,18 @@ class HistoryPresenter extends BasePresenter
             ->setRenderer(function ($row) {
                 $btn = '';
 
-                if (!is_null($row['FIK']))
+                if (!is_null($row->FIK) &&
+                    $row->TotalPrice > 0 &&
+                    $this->eetDataModel->getReceiptByParentId($row->ID) === false
+                )
                 {
-                    $total_price = $row['TotalPrice'];
                     $btn = Html::el('a')
                         ->setText('Storno')
-                        ->setAttribute('class', 'btn btn-xs btn-danger');
-
-                    if ($total_price <= 0 OR !is_null($row['ParentID']))
-                    {
-                        $btn->setAttribute('disabled', 'disabled');
-                    }
-                    else
-                    {
-                        $btn->setAttribute('href', $this->link('Shortcuts:default', array(
-                            'id' => $row['ID'],
+                        ->setAttribute('class', 'btn btn-xs btn-danger')
+                        ->setAttribute('href', $this->link('Shortcuts:default', array(
+                            'id' => $row->ID,
                             'do' => 'storno'
                         )));
-                    }
                 }
 
                 return $btn;
