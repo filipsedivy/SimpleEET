@@ -119,7 +119,7 @@ class EETService
         $receipt->bkp = $payment['BKP'];
 
         if (is_null($payment['PKP'])) throw new \Exception('PKP kód neexistuje');
-        $receipt->pkp = $payment['PKP'];
+        $receipt->pkp = base64_decode($payment['PKP']);
 
         return $this->send($receipt, $id);
     }
