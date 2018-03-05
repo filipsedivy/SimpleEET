@@ -9,12 +9,23 @@ use Nette\Forms\Controls;
 class Form extends Nette\Application\UI\Form
 {
 
+    /**
+     * @param Nette\ComponentModel\IContainer|null $parent
+     * @param string|null                          $name
+     */
     public function __construct(Nette\ComponentModel\IContainer $parent = null, $name = null)
     {
         parent::__construct($parent, $name);
         $this->setRenderer(new Render());
     }
 
+
+    /**
+     * @param string      $name
+     * @param string|null $label
+     *
+     * @return Controls\TextInput
+     */
     public function addIntegerDouble($name, $label = null)
     {
         static $pattern = '\\d+(\\.\\d+)?';

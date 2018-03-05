@@ -8,6 +8,9 @@ use Nette\Forms\Controls;
 
 class Render extends DefaultFormRenderer
 {
+    /**
+     * @var array
+     */
     public $wrappers = array(
         'form'     => array(
             'container' => null,
@@ -56,6 +59,13 @@ class Render extends DefaultFormRenderer
         ),
     );
 
+
+    /**
+     * @param Nette\Forms\Form $form
+     * @param string|null      $mode
+     *
+     * @return string
+     */
     public function render(Nette\Forms\Form $form, $mode = null)
     {
         $form->getElementPrototype()->addClass('form-horizontal');
