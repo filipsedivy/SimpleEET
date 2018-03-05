@@ -37,7 +37,7 @@ class SettingPresenter extends BasePresenter
             {
                 $caption = $parameter->Translate;
 
-                if(is_null($caption))
+                if (is_null($caption))
                 {
                     $caption = Html::el('code')
                         ->setAttribute('title', 'Překlad není k dispozici, a proto byl použit klíč')
