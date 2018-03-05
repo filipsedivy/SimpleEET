@@ -49,13 +49,14 @@ class SettingPresenter extends BasePresenter
     }
 
     /**
-     * @param $key string Klíč -> dic,...
+     * @param $key  string Klíč -> dic,...
      * @param $name string hide, show
+     *
      * @return bool
-    */
+     */
     public function checked($key, $name)
     {
-        $value = $this->settingModel->getValueByKey('visible_'.$key);
-        return (is_null($value) && $name == 'show') OR $name === $value;
+        $value = $this->settingModel->getValueByKey($key);
+        return (is_null($value) && $name == 'show') || $name === $value;
     }
 }
