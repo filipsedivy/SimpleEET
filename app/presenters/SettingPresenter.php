@@ -2,47 +2,74 @@
 
 namespace App\Presenters;
 
-use Nette\Application\UI\Form;
+use App\UI\Form;
+use Nette\Utils\Html;
 
 class SettingPresenter extends BasePresenter
 {
-
-
     public function createComponentElements()
     {
-        $parameters = $this->context->parameters['eet_params'];
+        $parameters = $this->settingModel->getByGroup('setting');
 
         $form = new Form();
 
-        foreach($parameters as $xml => $object)
+        foreach ($parameters as $parameter)
         {
-            if(isset($object['required'])) { continue; }
+            $additionalData = json_decode($parameter->AdditionalData);
 
-            if(isset($object['items']))
+            if (isset($additionalData->required) && $additionalData->required === true) continue;
+
+            if (isset($additionalData->items))
             {
-                $form->addRadioList($xml, $object['caption'], $object['items']);
+                $items = array();
+                foreach ($additionalData->items as $key => $value)
+                {
+                    $items[$key] = $value;
+                }
+
+                $form->addRadioList(
+                    $parameter->Key,
+                    is_null($parameter->Translate) ? $parameter->Key : $parameter->Translate,
+                    $items
+                )->setDefaultValue($parameter->Value);
             }
             else
             {
-                $form->addRadioList($xml, $object['caption'], array(
-                    'hide' => 'Skrýt',
-                    'show' => 'Zobrazit'
-                ));
+                $caption = $parameter->Translate;
+
+                if(is_null($caption))
+                {
+                    $caption = Html::el('code')
+                        ->setAttribute('title', 'Překlad není k dispozici, a proto byl použit klíč')
+                        ->setText($parameter->Key);
+                }
+
+                $form->addCheckbox(
+                    $parameter->Key,
+                    $caption
+                )->setDefaultValue($parameter->Visible);
             }
         }
 
         $form->addSubmit('save', 'Uložit');
 
-        $form->onSubmit[] = array($this, 'submitElementsForm');
+        $form->onSuccess[] = array($this, 'submitElementsForm');
 
         return $form;
     }
 
     public function submitElementsForm(Form $form)
     {
-        foreach($form->getValues() as $key => $value)
+        foreach ($form->getValues() as $key => $value)
         {
-            $this->settingModel->insert('visible_'.$key, $value);
+            if (is_bool($value))
+            {
+                $this->settingModel->updateColumn('Visible', $key, +$value);
+            }
+            else
+            {
+                $this->settingModel->updateColumn('Value', $key, $value);
+            }
         }
         $this->flashMessage('Nastavení elementů bylo uloženo', 'alert-success');
         $this->redirect('this');

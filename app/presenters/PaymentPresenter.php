@@ -9,41 +9,42 @@ class PaymentPresenter extends BasePresenter
 {
     public function createComponentPayment()
     {
-        $parameters = $this->context->parameters['eet_params'];
-
         $form = new Form();
 
-        foreach($parameters as $xml => $object)
+        $items = $this->settingModel->getVisibleByGroup('setting');
+        foreach ($items as $item)
         {
-            $visible = $this->settingModel->getValueByKey('visible_'.$xml);
-            if($visible === 'hide') continue;
+            $control = null;
+            $translate = is_null($item->Translate) ? $item->Key : $item->Translate;
+            $additionalData = json_decode($item->AdditionalData);
 
-            $element = null;
+            switch ($item->Type)
+            {
+                case 'string':
+                    $control = $form->addText($item->Key, $translate);
+                    break;
 
-            if(isset($object['items']))
-            {
-                // @TODO Dodělat výpis ITEMS
-            }
-            else
-            {
-                $element = $form->addText($xml, $object['caption']);
-            }
-
-            if(isset($object['required']))
-            {
-                $element->setRequired();
+                case 'numeric':
+                    $control = $form->addIntegerDouble($item->Key, $translate);
+                    break;
             }
 
-            // -= Pořadové číslo =-
-            if($xml === 'porad_cis')
+            if (isset($additionalData->required) && $additionalData->required === true)
             {
-                $element->setDefaultValue($this->eetDataModel->lastId(true));
+                $control->setRequired('Položka \'' . $translate . '\' je povinná');
+            }
+
+            if ($item->Key === 'porad_cis')
+            {
+                $control->setDefaultValue($this->eetDataModel->lastId())
+                    ->setAttribute('readonly');
             }
         }
 
-        $form->addSubmit('save', 'Uložit');
 
-        $form->onSubmit[] = array($this, 'createPayment');
+        $form->addSubmit('pay', 'Zaevidovat platbu');
+
+        $form->onSuccess[] = array($this, 'createPayment');
 
         return $form;
     }

@@ -19,24 +19,26 @@ class ShortcutsPresenter extends BasePresenter
         foreach($unsendPayments as $unsendPayment)
         {
             $payment = null;
+            $paymentId = $unsendPayment['ID'];
 
             try
             {
-                $payment = $this->eetService->resendPayment($unsendPayment['ID']);
+                $payment = $this->eetService->resendPayment($paymentId);
+                if($payment)
+                {
+                    $statsSuccess++;
+                }
             }
             catch(\Exception $e)
             {
                 Debugger::log($e);
-                $this->flashMessage('Nastala chyba v sub-systému pro znovuzaslání plateb', 'alert-danger');
-                $this->redirect('Homepage:default');
+                $this->eetService->updateExceptionByPaymentId($paymentId, $e);
+                $statsUnuccess++;
             }
-
-            if($payment) $statsSuccess++;
-            else $statsUnuccess++;
         }
 
         $this->flashMessage('Platby byly znovu odeslány. Úspěšných: '.$statsSuccess.', Neúspěšných: '.$statsUnuccess,
-            'alert-success');
+            'alert-info');
         $this->redirect('Homepage:default');
     }
 

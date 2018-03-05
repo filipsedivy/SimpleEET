@@ -2,50 +2,10 @@
 
 {block content}
 
-<div class="row text-center payment-helper">
-    <div class="col-md-6">Popis</div>
-    <div class="col-md-3">Vstupní pole</div>
-    <div class="col-md-3">XML element</div>
+<div class="well">
+    Pokud je nepovinná položka a není vyplněná tak nedochází k zařazení do EET
 </div>
 
-<hr>
-
-<form class="form-horizontal" n:name="payment">
-    {foreach $form->components as $component}
-        {if $component instanceof Nette\Forms\Controls\TextInput}
-            {if $component->getRules()->isRequired()}
-                <div class="form-group has-feedback">
-                    <label class="col-sm-6 control-label">{$component->caption}</label>
-                    <div class="col-sm-3">
-                        <input n:name="$component" class="form-control">
-                        <span class="glyphicon glyphicon-asterisk form-control-feedback"></span>
-                        <span class="sr-only">(required)</span>
-                    </div>
-                    <div class="col-sm-3">
-                        <span class="form-control">{$component->name}</span>
-                    </div>
-                </div>
-            {else}
-                <div class="form-group">
-                    <label class="col-sm-6 control-label">{$component->caption}</label>
-                    <div class="col-sm-3">
-                        <input n:name="$component" class="form-control">
-                    </div>
-                    <div class="col-sm-3">
-                        <span class="form-control">{$component->name}</span>
-                    </div>
-                </div>
-            {/if}
-        {elseif $component instanceof Nette\Forms\Controls\HiddenField}
-            <input n:name="$component">
-        {elseif $component instanceof Nette\Forms\Controls\SubmitButton}
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button n:name="$component->name" class="btn btn-default">{$component->caption}</button>
-                </div>
-            </div>
-        {/if}
-    {/foreach}
-</form>
+{control payment}
 
 {/block}
